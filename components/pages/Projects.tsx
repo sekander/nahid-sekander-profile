@@ -9,10 +9,10 @@ const ProjectText= styled.div`
     height: 70vh;
 `
 
-const Home: React.FunctionComponent = () => {
+const Projects: React.FunctionComponent = () => {
     return (
         <ProjectText>Projects</ProjectText>
     )
 }
 
-export default Home
+export default Projects 

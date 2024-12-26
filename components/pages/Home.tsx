@@ -11,7 +11,8 @@ const HomeText = styled.div`
 
 const Home: React.FunctionComponent = () => {
     return (
-        <HomeText>Home</HomeText>
+        <HomeText></HomeText>
+        // <HomeText>Home</HomeText>
     )
 }
 

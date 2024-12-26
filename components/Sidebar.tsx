@@ -30,15 +30,28 @@ const MenuIconClose = styled(Link)`
     color: #ffffff;
 `
 
-const SidebarMenu = styled.div<{close: boolean}>`
-    width: 250px;
-    height: 100vh;
-    background-color: #000080;
-    position: fixed;
-    top: 0;
-    left: ${({ close}) => close ? '0' : '-100%'};
-    transition: .6s;
-`
+// const SidebarMenu = styled.div<{close: boolean}>`
+//     width: 250px;
+//     height: 100vh;
+//     background-color: #000080;
+//     position: fixed;
+//     top: 0;
+//     left: ${({ close}) => close ? '0' : '-100%'};
+//     transition: .6s;
+// `
+
+const SidebarMenu = styled.div.withConfig({
+  shouldForwardProp: (prop) => prop !== "close",
+})<{ close: boolean }>`
+  width: 250px;
+  height: 100vh;
+  background-color: #000080;
+  position: fixed;
+  top: 0;
+  left: ${({ close }) => (close ? "0" : "-100%")};
+  transition: 0.6s;
+`;
+
 
 const MenuItems = styled.li`
     list-style: none;
@@ -76,12 +89,12 @@ const Sidebar: React.FunctionComponent = () => {
     return(
         <div>
             <Navbar>
-                <MenuIconOpen to="#">
+                <MenuIconOpen to="#" onClick={showSidebar}>
                     <FaIcons.FaBars />
                 </MenuIconOpen>
             </Navbar>
 
-            <SidebarMenu close={close}>
+            <SidebarMenu close={close} onClick={showSidebar}>
                 <MenuIconClose to="#">
                     <FaIcons.FaTimes />
                 </MenuIconClose>
@@ -99,7 +112,6 @@ const Sidebar: React.FunctionComponent = () => {
                 })}
 
             </SidebarMenu>
-
         </div>
     );
 }

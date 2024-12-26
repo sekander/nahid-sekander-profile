@@ -3,11 +3,15 @@ import { Canvas } from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei'
 import { motion } from 'framer-motion'
 import RotatingBox from './components/RotatingBox'
-import Navbar from './components/Navbar'
-import Sidebar from './components/Sidebar'
+// import Navbar from './components/Navbar'
 import './App.css'
+import Sidebar from './components/Sidebar'
 
-
+import Home from './components/pages/Home'
+import About from './components/pages/About'
+import Projects from './components/pages/Projects'
+import Contact from './components/pages/Contact'
+import { Route, Routes } from 'react-router-dom'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -16,8 +20,17 @@ function App() {
     <div className='h-screen bg-gray-900 text-white flex flex-col items-center justify-center space-y-8'>
       {/* Navbar */}
       {/* <Navbar /> */}
-      <Sidebar />
       
+      <Sidebar />
+      <Routes>
+          <Route path='/' element={<Home />} />
+          <Route path='/about' element={<About />} />            
+          <Route path='/projects' element={<Projects />} />    
+          <Route path='/contact' element={<Contact />} />
+      </Routes>
+
+
+
       {/* Animated Header*/}
       <motion.h1
         className="text-4xl font-bold"

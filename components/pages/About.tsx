@@ -9,10 +9,10 @@ const AboutText = styled.div`
     height: 70vh;
 `
 
-const Home: React.FunctionComponent = () => {
+const About: React.FunctionComponent = () => {
     return (
         <AboutText>About</AboutText>
     )
 }
 
-export default Home
+export default About 

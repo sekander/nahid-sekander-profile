@@ -9,10 +9,10 @@ const ContactText = styled.div`
     height: 70vh;
 `
 
-const Home: React.FunctionComponent = () => {
+const Contact: React.FunctionComponent = () => {
     return (
         <ContactText>Contact</ContactText>
     )
 }
 
-export default Home
+export default Contact
