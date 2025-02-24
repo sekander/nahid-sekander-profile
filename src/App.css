@@ -1,0 +1,81 @@
+#root {
+  /* max-width: 1280px; */
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+  width: 100%;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #ff6464aa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+
+/* Full-screen container with side padding */
+.app-container {
+  /* display: flex; */
+  /* min-height: 100vh; */
+  /* flex-direction: row; */
+  /* background-color: #242424; Dark background */
+  /* /border-left: 55px solid #ff9564; /* Orange side border */
+  /* border-right: 55px solid #ff9564; Orange side border  */
+  display: flex; /* Enable flexbox for alignment */
+  flex-direction: column; /* Stack items vertically */
+  align-items: center; /* Center items horizontally */
+  justify-content: center; /* Center items vertically */
+  min-height: 100vh; /* Full screen height */
+  background-color: #242424; /* Dark background */
+  padding-left: 100px; /* Add padding to the left */
+  padding-right: 100px; /* Add padding to the right */
+  box-sizing: border-box; /* Ensure padding doesn't affect width */
+}
+
+/* Main content container */
+.content-container {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  padding: 20px; /* Internal padding for content */
+}
+
+/* Optional: Padding for individual sections */
+#home, #about, #projects, #contact {
+  margin-bottom: 20px; /* Space between sections */
+}
+
+h1, h2, h3 {
+  color: #ff9564; /* Light orange color for text headers */
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
