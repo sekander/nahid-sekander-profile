@@ -1,20 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import { ReactDOM } from 'react';
+// import React, { useEffect, useState } from 'react';
+// import { ReactDOM } from 'react';
 import { TypeAnimation } from 'react-type-animation';
 import { motion } from 'framer-motion';
 import styled from 'styled-components';
 import * as FaIcons from 'react-icons/fa';
 import { Link as ScrollLink } from 'react-scroll'; // Importing Link from react-scroll
-import APITest from '../APITest';
+// import APITest from '../APITest';
 
 const HomeContainer = styled.div`
   display: flex;
   width: 80vw;
-  // flex-direction: row;
   flex-direction: column;
   align-items: flex-start;
-  // justify-content: center;
-  // justify-content: flex-start;
   padding: 35px;
   flex-wrap: wrap; /* Allow wrapping on smaller screens */
   backdrop-filter: blur(10px); /* Glass-like blur effect */
@@ -27,16 +24,11 @@ const HomeText = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  // justify-content: left;
 
-  // justify-content: flex-start;
   font-size: 20px;
   color: rgba(255, 255, 255, 0.9); /* Slightly transparent white text */
   font-weight: bold;
 
-  // @media (max-width: 568px) {
-  //   align-items: center; /* Center text on mobile */
-  // }
 `;
 
 const StyledButton = styled.button.withConfig({
@@ -77,24 +69,6 @@ const TopButtonGroup = styled.div`
   width: 100%; /* Full width of the container */
   max-width: 500px;
   
-  // @media (max-width: 1095px) {
-  //   max-width: 750px;
-  // }
-
-  // @media (max-width: 568px) {
-  //   grid-template-columns: 1fr; /* Single column layout for mobile */
-  //   gap: 2px;
-  // }
-
-  /* Apply dynamic width scaling for buttons */
-  // & button {
-  //   width: 45vw; /* Buttons will take 45% of the viewport width */
-  // }
-
-  // @media (max-width: 568px) {
-  //   & button {
-  //     width: 40vw; /* Adjust button width for smaller viewports (mobile) */
-  //   }
   }
 `;
 
@@ -108,39 +82,9 @@ const BottomButtonGroup = styled.div`
   width: 100%; /* Full width of the container */
   max-width: 500px;
   
-  // @media (max-width: 1095px) {
-  //   max-width: 750px;
-  // }
-
-  // @media (max-width: 568px) {
-  //   grid-template-columns: 1fr; /* Single column layout for mobile */
-  //   gap: 2px;
-  //   height: 10vh; /* Adjust height for better usability on mobile */
-  // }
-
-  // /* Apply dynamic width scaling for buttons */
-  // & button {
-  //   width: 30vw; /* Buttons will take 30% of the viewport width */
-  // }
-
-  // @media (max-width: 568px) {
-  //   & button {
-  //     width: 90vw; /* Adjust button width for smaller viewports (mobile) */
-  //   }
-  // }
 `;
 
 const Home: React.FunctionComponent = () => {
-  const [dockerpsData, setDockerpsData] = useState('');
-  const [dockerstatsData, setDockerstatsData] = useState('');
-
-  // Use useEffect to log childData whenever it changes
-  // useEffect(() => {
-  //   if (childData) {
-  //     console.log(childData); // Log data when it's updated
-  //   }
-  // }, [childData]); // Only run when childData changes
-
 
   return (
     <>
@@ -152,7 +96,6 @@ const Home: React.FunctionComponent = () => {
           style={{
             marginTop: '5rem',
             fontSize: '3rem',
-            // marginTop: '10rem',
             color: 'white',
           }}
           initial={{ opacity: 0, y: -20 }}
@@ -194,7 +137,6 @@ const Home: React.FunctionComponent = () => {
             ]}
             speed={50}
             repeat={Infinity}
-            // style={{ fontSize: '1em'}}
             />
         {/* </h1> */}
         </motion.h1>
@@ -207,8 +149,6 @@ const Home: React.FunctionComponent = () => {
       </HomeText>
       <div className='home-button-group'>
         <TopButtonGroup>
-          {/* <StyledButton style={{ height: '250px', marginTop: '80px', width: '182px' }}> */}
-          {/* <StyledButton style={{ height: '250px', marginTop: '80px', width: 'auto' }}> */}
           <ScrollLink
               to="about"
               smooth={true}
@@ -242,8 +182,6 @@ const Home: React.FunctionComponent = () => {
           <StyledButton
             // small
             small={true}
-            // onClick={() => window.open('/path/to/your-cv.pdf', '_blank')}
-            // onClick={() => window.open('https://drive.google.com/file/d/1ps_OQQXzHM6TYio6YQkEArfszKLBzvNG/view', '_blank')}
             onClick={() => window.open('https://docs.google.com/document/d/1YjUUDrk-XqD7qTWNiyCXEnpT9FPAVPVzZPfXIwKw4wg/edit?tab=t.0#heading=h.413nannykgih', '_blank')}
           >
             <FaIcons.FaDownload />
@@ -269,7 +207,14 @@ const Home: React.FunctionComponent = () => {
         </BottomButtonGroup>
       </div>
 
-       {/* Render raw JSON data */}
+
+
+
+
+
+
+
+       {/* Render raw JSON data
        <h2>Raw JSON Data from Docker PS:</h2>
        {Array.isArray(dockerpsData) && dockerpsData.map((item, index) => (
         <div key={index}>
@@ -297,7 +242,7 @@ const Home: React.FunctionComponent = () => {
           </ul>
         </div>
         ))}
-        <APITest returnData={setDockerpsData} returnData_2={setDockerstatsData}/>
+        <APITest returnData={setDockerpsData} returnData_2={setDockerstatsData}/> */}
 
     </HomeContainer>
 

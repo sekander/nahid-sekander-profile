@@ -7,8 +7,7 @@ import Form from 'react-bootstrap/Form';
 const ContactText = styled.div`
   display: flex;
   justify-content: center;
-//   font-size: 8vw; /* Scales based on the width of the browser */
-    font-size: 50px;
+  font-size: 50px;
   color: white;
 `;
 
@@ -17,7 +16,6 @@ const ButtonGrid = styled.div`
   grid-template-columns: repeat(2, 1fr);  /* 2 buttons per row */
   gap: 20px;
   margin-top: 20px;
-//   width: 60vw; /* Set width to scale with browser width */
   justify-items: center; /* Center items horizontally */
   
   @media (max-width: 768px) {
@@ -44,53 +42,6 @@ const ContactForm = styled(Form)`
 `;
 
 const Contact: React.FunctionComponent = () => {
-  //   const [formData, setFormData] = useState({
-  //   name: '',
-  //   email: '',
-  //   subject: '',
-  //   message: ''
-  // });
-  // const [isSending, setIsSending] = useState(false);
-  // const [statusMessage, setStatusMessage] = useState('');
-
-  // const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-  //   setFormData({
-  //     ...formData,
-  //     [e.target.name]: e.target.value
-  //   });
-  // };
-
-  // const handleSubmit = (e: React.FormEvent) => {
-  //   e.preventDefault();
-  //   setIsSending(true);
-  //   setStatusMessage('Sending...');
-    
-  //   emailjs
-  //     .send(
-  //       'your_service_id', // Replace with your EmailJS service ID
-  //       'your_template_id', // Replace with your EmailJS template ID
-  //       formData, // Pass the form data
-  //       'your_user_id' // Replace with your EmailJS user ID
-  //     )
-  //     .then(
-  //       (result) => {
-  //         console.log(result.text);
-  //         setStatusMessage('Message sent successfully!');
-  //       },
-  //       (error) => {
-  //         console.log(error.text);
-  //         setStatusMessage('An error occurred, please try again later.');
-  //       }
-  //     )
-  //     .finally(() => {
-  //       setIsSending(false);
-  //     });
-  // };
-
-
-
-
-
 
   return (
     <>

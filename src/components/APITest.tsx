@@ -1,16 +1,57 @@
 import React, { useEffect, useState } from 'react'
 
-// export default function APITest() {
-const APITest = ({returnData, returnData_2}) => {
-    const [data, setData] = useState(null);
+interface APITestProps {
+    returnData: (data: any) => void;
+    returnData_2: (data: any) => void;
+}
+
+const APITest: React.FC<APITestProps> = ({ returnData, returnData_2 }) => {
+    // const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        fetch("https://nahid-sekander.duckdns.org/dk/docker/1")
+        //Update docker service
+        fetch("https://nahid-sekander.duckdns.org/docker-service/docker/1", {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json', // Ensure the content type is JSON
+                },
+            })
             .then(response => response.json())
             .then(fetchedData => {
-                setData(fetchedData);
+                console.log(fetchedData);
+                // setData(fetchedData);
+                // setLoading(false);
+                // returnData(fetchedData);
+            })
+            .catch(error => {
+                setError(error);
+                setLoading(false);
+            });
+        
+        fetch("https://nahid-sekander.duckdns.org/docker-service/docker/2", {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json', // Ensure the content type is JSON
+                },
+            })
+            .then(response => response.json())
+            .then(fetchedData => {
+                console.log(fetchedData);
+                // setData(fetchedData);
+                // setLoading(false);
+                // returnData(fetchedData);
+            })
+            .catch(error => {
+                setError(error);
+                setLoading(false);
+            });
+        
+        fetch("https://nahid-sekander.duckdns.org/docker-service/docker/1")
+            .then(response => response.json())
+            .then(fetchedData => {
+                // setData(fetchedData);
                 setLoading(false);
                 returnData(fetchedData);
             })
@@ -18,10 +59,10 @@ const APITest = ({returnData, returnData_2}) => {
                 setError(error);
                 setLoading(false);
             });
-        fetch("https://nahid-sekander.duckdns.org/dk/docker/2")
+        fetch("https://nahid-sekander.duckdns.org/docker-service/docker/2")
             .then(response => response.json())
             .then(fetchedData => {
-                setData(fetchedData);
+                // setData(fetchedData);
                 setLoading(false);
                 returnData_2(fetchedData);
             })
@@ -29,7 +70,6 @@ const APITest = ({returnData, returnData_2}) => {
                 setError(error);
                 setLoading(false);
             });
-    // }, []);
     }, [returnData, returnData_2]);
 
     if(loading){
@@ -39,22 +79,8 @@ const APITest = ({returnData, returnData_2}) => {
     if(error){
         return <div> Error: </div>
     }
-        // console.log(data);
 
-
-//   return null;
     return <div>APITest Component</div>;
-
-    // <div>
-    //     {/* <h1>APITest</h1> */}
-    //     {/* <pre>{JSON.stringify(data, null, 2)}</pre> */}
-
-
-
-
-
-    // </div>
-  
 }
 
 export default APITest;

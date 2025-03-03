@@ -28,10 +28,8 @@ type CustomToggeleProps = {
 
 const ExpandableCard = () => {
 
-// function CustomToggle({ children, eventKey }) {
 function CustomToggle({ children, eventKey } : CustomToggeleProps) {
   const validEventKey = eventKey ?? '';
-  //const decoratedOnClick = useAccordionButton(eventKey, () =>
   const decoratedOnClick = useAccordionButton(validEventKey, () =>
     console.log('totally custom!'),
   );

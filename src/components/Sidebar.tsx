@@ -86,28 +86,18 @@ const MenuItemLinks = styled(ScrollLink)`
 const Sidebar: React.FunctionComponent = () => {
   const [close, setClose] = useState(false);
 
-  // Create a reference for the sidebar and the menu button
-  //const sidebarRef = useRef(null);
   const menuButtonRef = useRef(null);
 
     // Create a reference for the sidebar and the menu button
   const sidebarRef = useRef<HTMLDivElement | null>(null);
-  // const menuButtonRef = useRef<HTMLButtonElement | null>(null);
 
 
    // Close the sidebar when a click outside the sidebar or menu button occurs
    useEffect(() => {
-    // const handleClickOutside = (event: { target: any; }) => {
       const handleClickOutside = (event: MouseEvent) => {
       // Check if the click was outside of the sidebar and the menu button
       if (
         sidebarRef.current && !sidebarRef.current.contains(event.target as Node) 
-        // &&
-        // menuButtonRef.current && !menuButtonRef.current.contains(event.target as Node)
-        //sidebarRef.current && !sidebarRef.current.contains(event.target as Node) &&
-        //menuButtonRef.current && !menuButtonRef.current.contains(event.target as Node)
-
-
       ) {
         setClose(false); // Close the sidebar
       }

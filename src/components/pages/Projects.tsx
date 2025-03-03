@@ -1,5 +1,4 @@
 import { useState, useEffect, useMemo } from 'react';
-// import { useTransition, animated } from '@react-spring/web';
 import { motion } from 'framer-motion';
 import Modal from 'react-modal';
 
@@ -14,6 +13,7 @@ Modal.setAppElement('#root');  // The root element is typically <div id="root"><
 import CardItem from '../CardItem'; // Assuming CardItem is a separate component
 import { styled } from 'styled-components';
 import React from 'react';
+import APITest from '../APITest';
 
 // Styling for the Grid of Buttons
 const ButtonGrid = styled.div`
@@ -25,7 +25,8 @@ const ButtonGrid = styled.div`
 
   /* Grid layout that adjusts based on available width */
   // grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Adjusts columns based on screen width */
-  grid-template-columns: repeat(3, minmax(250px, 1fr)); /* Adjusts columns based on screen width */
+  // grid-template-columns: repeat(3, minmax(250px, 1fr)); /* Adjusts columns based on screen width */
+  grid-template-columns: repeat(4, minmax(250px, 1fr)); /* Adjusts columns based on screen width */
   
   /* Optional: Limit the grid's width to avoid it stretching too wide on very large screens */
   // max-width: 100%;
@@ -33,30 +34,24 @@ const ButtonGrid = styled.div`
 
   /* Responsive adjustments */
   @media (max-width: 1200px) {
-    gap: 15px; /* Reduce gap for medium screens */
+    grid-template-columns: repeat(3, minmax(250px, 1fr)); /* Adjusts columns based on screen width */
+    // gap: 15px; /* Reduce gap for medium screens */
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 950px) {
+    grid-template-columns: repeat(2, minmax(250px, 1fr)); /* Adjusts columns based on screen width */
+    // gap: 15px; /* Reduce gap for medium screens */
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 568px) {
     grid-template-columns: 1fr;  /* 1 card per row on very small screens */
-    gap: 10px; /* Reduce gap further on smaller screens */
+    // gap: 10px; /* Reduce gap further on smaller screens */
   }
 `;
 
 
 const Projects: React.FunctionComponent = () => {
-  // Initialize the state with card IDs and visibility flags
-  //const [cardIds, setCardIds] = useState([
-  const [cardIds ] = useState([
-    { id: 'card-0', isInView: false },
-    { id: 'card-1', isInView: false },
-    { id: 'card-2', isInView: false },
-    { id: 'card-3', isInView: false },
-    { id: 'card-4', isInView: false },
-    { id: 'card-5', isInView: false },
-    { id: 'card-6', isInView: false },
-    { id: 'card-7', isInView: false },
-    { id: 'card-8', isInView: false }
-  ]);
 
   // Modal state
   const [isOpen, setIsOpen] = useState(false);
@@ -68,19 +63,68 @@ const Projects: React.FunctionComponent = () => {
                                                      git_url: string; 
                                                      gif_url: string;
                                                      img_url: string;
+
+                                                     running: boolean;
                                                      modal_description: string;
                                                      } | null>(null);
 
-  // Open modal and set content (title + URL)
+  // Function to normalize the title by replacing spaces with underscores
+  const normalizeString = (name: string) => {
+    return name.replace(/_/g, ' '); // Replace spaces with underscores
+  };
+
+  const [dockerpsData, setDockerpsData] = useState([]);
+  const [dockerstatsData, setDockerstatsData] = useState([]);
+  const [combinedData, setCombinedData] = useState<{ source: string; key: string; value: any }[]>([]);
+
+  APITest({returnData : setDockerpsData, returnData_2: setDockerstatsData})
+  useEffect(() => {
+
+    const processDockerData = () => {
+      const combined: { source: string; key: string; value: any }[] = [];
+
+      if (Array.isArray(dockerpsData)) {
+        dockerpsData.forEach((item) => {
+        let name = normalizeString( item['Names']);
+
+          Object.entries(item || {}).forEach(([key, value]) => {
+            if(
+               key === "State" || 
+               key === "Status" || 
+               key === "RunningFor" || 
+               key === "CreatedAt")
+              combined.push({ source: name, key, value });
+          });
+        });
+      }
+
+      if (Array.isArray(dockerstatsData)) {
+        dockerstatsData.forEach((item) => {
+        let name = normalizeString( item['Name']);
+          Object.entries(item || {}).forEach(([key, value]) => {
+            if(key === "CPUPerc" ||
+               key === "MemPerc" ||
+               key === "MemUsage")
+              combined.push({ source: name, key, value });
+          });
+        });
+      }
+
+      setCombinedData(combined);
+    };
+
+    processDockerData();
+  }, [dockerpsData, dockerstatsData]);
+
   const openModal = (title: string, 
                      url: string, 
                      git_url: string, 
                      gif_url: string,
                      img_url: string, 
+                     running: boolean,
                      modal_description: string) => {
-    setModalContent({ title, url, git_url, gif_url, img_url, modal_description });
+    setModalContent({ title, url, git_url, gif_url, img_url, running, modal_description });
     setIsOpen(true);
-
 
     // Disable background scroll
     document.body.classList.add('modal-open');
@@ -122,117 +166,117 @@ const Projects: React.FunctionComponent = () => {
   //#################################################################################################  
 
   const phones = [
-  {
-    "model": "Apple iPhone 15 Pro Max",
-    "screen_size_inch": 6.7,
-    "screen_resolution": { "width": 2796, "height": 1290 }
-  },
-  {
-    "model": "Samsung Galaxy S23 Ultra",
-    "screen_size_inch": 6.8,
-    "screen_resolution": { "width": 3088, "height": 1440 }
-  },
-  {
-    "model": "Google Pixel 8 Pro",
-    "screen_size_inch": 6.7,
-    "screen_resolution": { "width": 2992, "height": 1344 }
-  },
-  {
-    "model": "OnePlus 11 5G",
-    "screen_size_inch": 6.7,
-    "screen_resolution": { "width": 3216, "height": 1440 }
-  },
-  {
-    "model": "Xiaomi 13 Pro",
-    "screen_size_inch": 6.73,
-    "screen_resolution": { "width": 3200, "height": 1440 }
-  },
-  {
-    "model": "Samsung Galaxy Z Fold 5",
-    "screen_size_inch": 7.6,
-    "screen_resolution": { "width": 2208, "height": 1768 }
-  },
-  {
-    "model": "Apple iPhone 15",
-    "screen_size_inch": 6.1,
-    "screen_resolution": { "width": 2532, "height": 1170 }
-  },
-  {
-    "model": "Sony Xperia 1 V",
-    "screen_size_inch": 6.5,
-    "screen_resolution": { "width": 3840, "height": 1644 }
-  },
-  {
-    "model": "Oppo Find X6 Pro",
-    "screen_size_inch": 6.82,
-    "screen_resolution": { "width": 3168, "height": 1440 }
-  },
-  {
-    "model": "Motorola Edge 40 Pro",
-    "screen_size_inch": 6.7,
-    "screen_resolution": { "width": 2400, "height": 1080 }
-  },
-  {
-    "model": "LG Velvet",
-    "screen_size_inch": 6.8,
-    "screen_resolution": { "width": 2460, "height": 1080 }
-  },
-  {
-    "model": "Nokia 3310",
-    "screen_size_inch": 2.4,
-    "screen_resolution": { "width": 320, "height": 240 }
-  },
-  {
-    "model": "Samsung Galaxy Z Flip 4",
-    "screen_size_inch": 6.7,
-    "screen_resolution": { "width": 2640, "height": 1080 }
-  },
-  {
-    "model": "Huawei P50 Pro",
-    "screen_size_inch": 6.6,
-    "screen_resolution": { "width": 2700, "height": 1228 }
-  },
-  {
-    "model": "Samsung Galaxy Z Flip 5",
-    "screen_size_inch": 6.7,
-    "screen_resolution": { "width": 2640, "height": 1080 }
-  },
-  {
-    "model": "Motorola Razr 2023",
-    "screen_size_inch": 6.9,
-    "screen_resolution": { "width": 2640, "height": 1080 }
-  },
-  {
-    "model": "Google Pixel Fold",
-    "screen_size_inch": 7.6,
-    "screen_resolution": { "width": 2208, "height": 1840 }
-  },
-  {
-    "model": "Huawei Mate Xs 2",
-    "screen_size_inch": 8.0,
-    "screen_resolution": { "width": 2480, "height": 2200 }
-  },
-  {
-    "model": "Samsung Galaxy Z Fold 4",
-    "screen_size_inch": 7.6,
-    "screen_resolution": { "width": 2208, "height": 1768 }
-  },
-  {
-    "model": "Asus ZenFone 9",
-    "screen_size_inch": 5.9,
-    "screen_resolution": { "width": 2400, "height": 1080 }
-  },
-  {
-    "model": "Xiaomi Mi Mix 4",
-    "screen_size_inch": 6.67,
-    "screen_resolution": { "width": 2400, "height": 1080 }
-  },
-  {
-    "model": "Vivo X Fold 2",
-    "screen_size_inch": 8.03,
-    "screen_resolution": { "width": 2160, "height": 1916 }
-  }
-];
+    {
+      "model": "Apple iPhone 15 Pro Max",
+      "screen_size_inch": 6.7,
+      "screen_resolution": { "width": 2796, "height": 1290 }
+    },
+    {
+      "model": "Samsung Galaxy S23 Ultra",
+      "screen_size_inch": 6.8,
+      "screen_resolution": { "width": 3088, "height": 1440 }
+    },
+    {
+      "model": "Google Pixel 8 Pro",
+      "screen_size_inch": 6.7,
+      "screen_resolution": { "width": 2992, "height": 1344 }
+    },
+    {
+      "model": "OnePlus 11 5G",
+      "screen_size_inch": 6.7,
+      "screen_resolution": { "width": 3216, "height": 1440 }
+    },
+    {
+      "model": "Xiaomi 13 Pro",
+      "screen_size_inch": 6.73,
+      "screen_resolution": { "width": 3200, "height": 1440 }
+    },
+    {
+      "model": "Samsung Galaxy Z Fold 5",
+      "screen_size_inch": 7.6,
+      "screen_resolution": { "width": 2208, "height": 1768 }
+    },
+    {
+      "model": "Apple iPhone 15",
+      "screen_size_inch": 6.1,
+      "screen_resolution": { "width": 2532, "height": 1170 }
+    },
+    {
+      "model": "Sony Xperia 1 V",
+      "screen_size_inch": 6.5,
+      "screen_resolution": { "width": 3840, "height": 1644 }
+    },
+    {
+      "model": "Oppo Find X6 Pro",
+      "screen_size_inch": 6.82,
+      "screen_resolution": { "width": 3168, "height": 1440 }
+    },
+    {
+      "model": "Motorola Edge 40 Pro",
+      "screen_size_inch": 6.7,
+      "screen_resolution": { "width": 2400, "height": 1080 }
+    },
+    {
+      "model": "LG Velvet",
+      "screen_size_inch": 6.8,
+      "screen_resolution": { "width": 2460, "height": 1080 }
+    },
+    {
+      "model": "Nokia 3310",
+      "screen_size_inch": 2.4,
+      "screen_resolution": { "width": 320, "height": 240 }
+    },
+    {
+      "model": "Samsung Galaxy Z Flip 4",
+      "screen_size_inch": 6.7,
+      "screen_resolution": { "width": 2640, "height": 1080 }
+    },
+    {
+      "model": "Huawei P50 Pro",
+      "screen_size_inch": 6.6,
+      "screen_resolution": { "width": 2700, "height": 1228 }
+    },
+    {
+      "model": "Samsung Galaxy Z Flip 5",
+      "screen_size_inch": 6.7,
+      "screen_resolution": { "width": 2640, "height": 1080 }
+    },
+    {
+      "model": "Motorola Razr 2023",
+      "screen_size_inch": 6.9,
+      "screen_resolution": { "width": 2640, "height": 1080 }
+    },
+    {
+      "model": "Google Pixel Fold",
+      "screen_size_inch": 7.6,
+      "screen_resolution": { "width": 2208, "height": 1840 }
+    },
+    {
+      "model": "Huawei Mate Xs 2",
+      "screen_size_inch": 8.0,
+      "screen_resolution": { "width": 2480, "height": 2200 }
+    },
+    {
+      "model": "Samsung Galaxy Z Fold 4",
+      "screen_size_inch": 7.6,
+      "screen_resolution": { "width": 2208, "height": 1768 }
+    },
+    {
+      "model": "Asus ZenFone 9",
+      "screen_size_inch": 5.9,
+      "screen_resolution": { "width": 2400, "height": 1080 }
+    },
+    {
+      "model": "Xiaomi Mi Mix 4",
+      "screen_size_inch": 6.67,
+      "screen_resolution": { "width": 2400, "height": 1080 }
+    },
+    {
+      "model": "Vivo X Fold 2",
+      "screen_size_inch": 8.03,
+      "screen_resolution": { "width": 2160, "height": 1916 }
+    }
+  ];
 
 
   // State to store current viewport dimensions
@@ -292,25 +336,25 @@ const Projects: React.FunctionComponent = () => {
   const scaleRatioY = viewportHeight / maxScreenHeight;
  
   // Function to convert dimensions from inches to pixels
- function convertInchesToPixels(inches: number) {
+  function convertInchesToPixels(inches: number) {
     const dpi = window.devicePixelRatio * 96; // Estimate DPI with devicePixelRatio (96 is standard DPI)
     return inches * dpi;
- }
+  }
 
  // Function to calculate screen width and height from diagonal screen size
-const calculateScreenDimensions = (screen_size_inch: number, width: number, height: number) => {
-  // Calculate diagonal resolution (using Pythagorean theorem)
-  const diagonalResolution = Math.sqrt(width ** 2 + height ** 2);
+  const calculateScreenDimensions = (screen_size_inch: number, width: number, height: number) => {
+    // Calculate diagonal resolution (using Pythagorean theorem)
+    const diagonalResolution = Math.sqrt(width ** 2 + height ** 2);
 
-  // Calculate the scale factor based on diagonal size
-  const scale = screen_size_inch / diagonalResolution;
+    // Calculate the scale factor based on diagonal size
+    const scale = screen_size_inch / diagonalResolution;
 
-  // Calculate the width and height in inches
-  const calculatedWidthInch = width * scale;
-  const calculatedHeightInch = height * scale;
+    // Calculate the width and height in inches
+    const calculatedWidthInch = width * scale;
+    const calculatedHeightInch = height * scale;
 
-  return { calculatedWidthInch, calculatedHeightInch };
-};
+    return { calculatedWidthInch, calculatedHeightInch };
+  };
 
   const phoneMappedToViewportScale = useMemo(() => {
     return phones.map((phone) => {
@@ -324,26 +368,25 @@ const calculateScreenDimensions = (screen_size_inch: number, width: number, heig
 
      const pixelWidth = convertInchesToPixels(calculatedWidthInch);
      const pixelHeight = convertInchesToPixels(calculatedHeightInch);
-     console.log(pixelWidth);
-     console.log(pixelHeight);
+      //  console.log(pixelWidth);
+      //  console.log(pixelHeight);
 
-    return {
-      model: phone.model,
-      screen_size_inch: phone.screen_size_inch,
-      screen_resolution: phone.screen_resolution,
-      width_inch: calculatedWidthInch.toFixed(2),
-      height_inch: calculatedHeightInch.toFixed(2),
-      width_px: pixelWidth,
-      height_px: pixelHeight,
-    };
-  });
-}, [phones, scaleRatioX, scaleRatioY]); // Recalculate when scale ratios change
+      return {
+        model: phone.model,
+        screen_size_inch: phone.screen_size_inch,
+        screen_resolution: phone.screen_resolution,
+        width_inch: calculatedWidthInch.toFixed(2),
+        height_inch: calculatedHeightInch.toFixed(2),
+        width_px: pixelWidth,
+        height_px: pixelHeight,
+      };
+    });
+  }, [phones, scaleRatioX, scaleRatioY]); // Recalculate when scale ratios change
 
 
 
   //State for select phone
   const [selectedPhone, setSelectedPhone] = useState(phoneMappedToViewportScale[0]);
-  // const [selectedPhone ] = useState(phoneMappedToViewportScale[0]);
 
   const handlePhoneSelet = (event: { target: { value: any; }; }) => {
     const select = event.target.value;
@@ -351,7 +394,9 @@ const calculateScreenDimensions = (screen_size_inch: number, width: number, heig
     const phone = phoneMappedToViewportScale.find(p => p.model === select);
     console.log(phone);
     // const phone = phoneMappedToViewportScale.find(p => p.model === select);
-    setSelectedPhone(phone);
+    if (phone) {
+      setSelectedPhone(phone);
+    }
   };
 
 
@@ -403,6 +448,7 @@ const calculateScreenDimensions = (screen_size_inch: number, width: number, heig
       gifUrl: 'https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExbnF6NHZnM3hqNjFxYXNvbWZ5eTRnb3l2ejBpYWplamM3dmR4Zml5MiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3oz8xZKXxXR0Amtlde/giphy.gif',
       imgUrl: '/assets/calendar.svg',
       online: true,
+      projectTypes: [0, 1, 2],
     },
     {
       id: 1,
@@ -450,9 +496,91 @@ const calculateScreenDimensions = (screen_size_inch: number, width: number, heig
       gifUrl: '',
       imgUrl: '/assets/mtg-life.svg',
       online: true,
+      projectTypes: [0, 1, 2],
     },
     {
       id: 2,
+      title: 'MTG Random Card',
+      text: `
+      <h2>Description</h2>
+        <p></p>
+        </br>
+      
+        <h3>Technology Stack</h3>
+        <ul>
+          <li><strong>JavaScript</strong></li>
+          <li><strong>HTML</strong></li>
+          <li><strong>CSS</strong></li>
+          <li><strong>PHP</strong></li>
+        </ul>
+
+        </br>
+        <h2>Features</h2>
+
+      `,
+      demoUrl: 'https://nahid-sekander.duckdns.org/projects/php/Assignment_1/',
+      gitUrl: 'https://github.com/sekander/Humber_College_Projects/tree/main/Web_Development/Semester_2/HTTP_5225-Web_Development_Project/Assignment_1',
+      gifUrl: '',
+      imgUrl: '/assets/mtg-random-cards.svg',
+      online: true,
+      projectTypes: [0, 1, 2, 9, 18],
+    },
+    {
+      id: 3,
+      title: 'MTG Deck Builder',
+      text: `
+      <h2>Description</h2>
+        <p></p>
+        </br>
+      
+        <h3>Technology Stack</h3>
+        <ul>
+          <li><strong>Node</strong></li>
+          <li><strong>Express</strong></li>
+          <li><strong>PUG</strong></li>
+          <li><strong>PHP</strong></li>
+        </ul>
+
+        </br>
+        <h2>Features</h2>
+
+      `,
+      demoUrl: 'https://nahid-sekander.duckdns.org/mtg-deck-builder',
+      gitUrl: 'https://github.com/sekander/Humber_College_Projects/tree/main/Web_Development/Semester_2/HTTP_5226-Back_End_Web_Development_2/Passion_Project',
+      gifUrl: '',
+      imgUrl: '/assets/mtg-deck-builder.svg',
+      online: true,
+      projectTypes: [0, 1, 2, 6, 18, 14],
+    },
+    {
+      id: 4,
+      title: 'Docker Services',
+      text: `
+      <h2>Description</h2>
+        <p></p>
+        </br>
+      
+        <h3>Technology Stack</h3>
+        <ul>
+          <li><strong>Node</strong></li>
+          <li><strong>Express</strong></li>
+          <li><strong>PUG</strong></li>
+          <li><strong>PHP</strong></li>
+        </ul>
+
+        </br>
+        <h2>Features</h2>
+
+      `,
+      demoUrl: 'https://nahid-sekander.duckdns.org/docker-service',
+      gitUrl: 'https://github.com/sekander/Humber_College_Projects/tree/main/Web_Development/Semester_2/HTTP_5222-Full_Stack_Web_Development/Assignment_1',
+      gifUrl: '',
+      imgUrl: '/assets/docker-service.svg',
+      online: true,
+      projectTypes: [15, 16, 17, 19, 2, 20],
+    },
+    {
+      id: 5,
       title: 'Teacher App',
       text: `
       <h2>Description</h2>
@@ -513,9 +641,10 @@ const calculateScreenDimensions = (screen_size_inch: number, width: number, heig
       gifUrl: '',
       imgUrl: '/assets/teacherapp.svg',
       online: true,
+      projectTypes: [0, 1, 2, 6, 18, 14],
     },
     {
-      id: 3,
+      id: 6,
       title: 'React Portfolio',
       text: `
         <h2>Project Description</h2>
@@ -557,14 +686,15 @@ const calculateScreenDimensions = (screen_size_inch: number, width: number, heig
           </ul>
 
       `,
-      demoUrl: 'https://nahid-sekander.duckdns.org/projects/calendar/',
-      gitUrl: 'https://github.com/sekander/Humber_College_Projects/tree/main/Web_Development/Semester_1/HTTP_5121-Web_Design/Project/calendar',
+      demoUrl: 'https://nahid-sekander.duckdns.org/',
+      gitUrl: 'https://github.com/sekander/nahid-sekander-profile',
       gifUrl: 'https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExbnF6NHZnM3hqNjFxYXNvbWZ5eTRnb3l2ejBpYWplamM3dmR4Zml5MiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3oz8xZKXxXR0Amtlde/giphy.gif',
       imgUrl: '/assets/portfolio.svg',
       online: true,
+      projectTypes: [0, 1, 3]
     },
     {
-      id: 4,
+      id: 7,
       title: 'TimeSheet App',
       text: `
       <h2>Description</h2>
@@ -600,9 +730,10 @@ const calculateScreenDimensions = (screen_size_inch: number, width: number, heig
       gifUrl: '',
       imgUrl: '/assets/excel-editor.svg',
       online: true,
+      projectTypes: [0, 1, 8, 14]
     },
     {
-      id: 5,
+      id: 8,
       title: 'OVPN Key Generator',
       text: 'Some quick example text to build on the card title and make up the bulk of the card\'s content.',
       demoUrl: 'https://nahid-sekander.duckdns.org/ovpn',
@@ -610,9 +741,10 @@ const calculateScreenDimensions = (screen_size_inch: number, width: number, heig
       gifUrl: 'https://github.com/sekander/Web-Design---HTTP-5121-0NA',
       imgUrl: '',
       online: false,
+      projectType: 3,
     },
     {
-      id: 6,
+      id: 9,
       title: 'Colour Memory Master',
       text: 'Some quick example text to build on the card title and make up the bulk of the card\'s content.',
       demoUrl: 'https://nahid-sekander.duckdns.org/colourmemorymaster',
@@ -621,11 +753,8 @@ const calculateScreenDimensions = (screen_size_inch: number, width: number, heig
       imgUrl: '',
       online: false,
     },
-
-
-
     {
-      id: 7,
+      id: 10,
       title: 'Contra Remix',
       text: `
         <h2>Description</h2>
@@ -655,9 +784,10 @@ const calculateScreenDimensions = (screen_size_inch: number, width: number, heig
       gifUrl: '',
       imgUrl: '/assets/contra-remix.svg',
       online: true,
+      projectTypes: [13, 14]
     },
     {
-      id: 8,
+      id: 11,
       title: 'Multi-Player Space Shooter',
       text: `
         <h2>Description</h2>
@@ -684,6 +814,7 @@ const calculateScreenDimensions = (screen_size_inch: number, width: number, heig
       gifUrl: '',
       imgUrl: '/assets/space-shooter.svg',
       online: true,
+      projectTypes: [12, 14]
     },
     // Add more cards here
   ];
@@ -705,12 +836,21 @@ const calculateScreenDimensions = (screen_size_inch: number, width: number, heig
         Projects
       </motion.h1>
       {/* <h1>Projects</h1> */}
+      {/*******************************************************************************************************************/}   
+      {/*******************************************************************************************************************/}   
+
+
+
+      {/*******************************************************************************************************************/}   
+      {/*******************************************************************************************************************/}   
+
 
       {/* Button Grid for Opening Modals */}
       <ButtonGrid
         style={{ marginBottom: "5rem" }}>
 
-        {cardsData.map((card, index) => (
+        {/* {cardsData.map((card, index) => ( */}
+        {cardsData.map((card) => (
           <CardItem
             key={`card-${card.id}`}
             id={card.id} // Ensure that each card has a unique ID
@@ -720,9 +860,11 @@ const calculateScreenDimensions = (screen_size_inch: number, width: number, heig
             gitUrl={card.gitUrl}
             gifUrl={card.gifUrl}
             imgUrl= {card.imgUrl}
-            isInView={cardIds[index].isInView} // Use the visibility flag for each card
+            running={false}
+            // isInView={cardIds[index].isInView} // Use the visibility flag for each card
             enabled={card.online}
             openModal={openModal}
+            projectTypes={card.projectTypes ? (Array.isArray(card.projectTypes) ? card.projectTypes : [card.projectTypes]) : undefined}
           />
         ))}
       </ButtonGrid>
@@ -737,6 +879,9 @@ const calculateScreenDimensions = (screen_size_inch: number, width: number, heig
       >
         {modalContent && (
           <div className="modal-content">
+              
+              
+
             <button className='close-btn' onClick={() => closeModal('appInfo')}>x</button>
             {/* <button className='close-btn' onClick={() => closeModal('appInfo')}>x</button> */}
             <h2 className="modal-title">{modalContent.title}</h2>
@@ -745,86 +890,126 @@ const calculateScreenDimensions = (screen_size_inch: number, width: number, heig
               {/* Left side with GIF */}
               <div className="modal-gif">
                 <img src={modalContent.gif_url} alt="Gif" />
-                    <h3>Select Mobile Device</h3>
-                    {/* Dropdown to select phone */}
-                    <select onChange={handlePhoneSelet} value={selectedPhone.model}>
-                      {phoneMappedToViewportScale.map((phone, index) => (
-                        <option key={index} value={phone.model}>
-                          {phone.model}
-                        </option>
-                      ))}
-                    </select>
+                <h3>Select Mobile Device</h3>
+                {/* Dropdown to select phone */}
+                <select onChange={handlePhoneSelet} value={selectedPhone.model}>
+                    {phoneMappedToViewportScale.map((phone, index) => (
+                      <option key={index} value={phone.model}>
+                        {phone.model}
+                      </option>
+                    ))}
+                </select>
 
-                  <button 
-                    onClick={toggleIframe}
-                    //className='modal-link modal-close-btn '
-                    className= {modalContent.title === "Contra Remix" ? 'disabled-btn' : 'modal-link modal-close-btn'}
-                    disabled= {modalContent.title === "Contra Remix"}
-                  >
-                    { openIframe ? 'Close' : `MOBILE : ${selectedPhone.screen_resolution.width} x ${selectedPhone.screen_resolution.height}`} 
-                  </button>
+                <button 
+                  onClick={toggleIframe}
+                  //className='modal-link modal-close-btn '
+                  className= {modalContent.title === "Contra Remix" ? 'disabled-btn' : 'modal-link modal-close-btn'}
+                  disabled= {modalContent.title === "Contra Remix"}
+                  // disabled= {modalContent.title === "Contra Remix" 
+                  //        || !modalContent.running}
+                >
+                  { openIframe ? 'Close' : `MOBILE : ${selectedPhone.screen_resolution.width} x ${selectedPhone.screen_resolution.height}`} 
+                </button>
 
-                  <a href={modalContent.url} 
-                     target="_blank" 
-                     rel="noopener noreferrer"
-                     className='modal-link demo-link'
-                  >WEB DEMO LINK</a>
-                  <a href={modalContent.git_url} 
-                     target="_blank" 
-                     rel="noopener noreferrer"
-                     className='modal-link git-repo-link'
-                  >GIT REPO</a>
-                  <h2>Current Viewport Dimensions</h2>
-                  <p>Width: {viewportWidth}px</p>
-                  <p>Height: {viewportHeight}px</p>
-                   {/* Conditionally render content based on `isOpen` */}
-                      {openIframe && (
-                      <>
-                        {/* <p>The state is now OPEN!</p> */}
-                          <Modal 
-                              isOpen={openIframe} 
-                              onRequestClose={() => closeModal('iframe')} 
-                              contentLabel="Example Modal"
-                              className={`custom-content ${closingIframe ? 'closing' : ''}`}
-                              //className={`custom-content ${closingIframe ? 'closing' : ''}`}
-                              overlayClassName={`custom-overlay ${closingIframe ? 'closing' : ''}`}
-                            >
-                              {modalContent && (
-                                <>
-                                  {/* <h2>{modalContent.title}</h2> */}
-                                  {/* <a href={modalContent.git_url} target="_blank" rel="noopener noreferrer">GIT REPO</a> */}
-                                  <button className='close-btn' onClick={() => closeModal('iframe')}>X</button>
-                                      <iframe
-                                        src={modalContent.url}
-                                        title={modalContent.title}
-                                        allow="cross-origin-isolated"
-                                        width={(selectedPhone.height_px * (scaleRatioY + 1))}
-                                        height={(selectedPhone.width_px * (scaleRatioX + 1))}
-                                      />
-                                </>
-                              )}
-                          </Modal>
-                      </>)}
-                      {/*
-                      {!openIframe && <p>The state is CLOSED.</p>}
-                      */}
+                <a href={modalContent.url} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className='modal-link demo-link'
+                    // onClick={(e) => {
+                    //   if (!modalContent.running) {
+                    //     e.preventDefault();  // Prevent the link from navigating if running is false
+                    //     return false;
+                    //   }
+                    // }}
+                >WEB DEMO LINK</a>
+                <a href={modalContent.git_url} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className='modal-link git-repo-link'
+                >GIT REPO</a>
+
+                <p> { modalContent.running ? 'running' : 'not'} </p>
+                <p> Docker Info </p>
+
+
+                {/* Loop through combinedData and render data items */}
+                {Object.entries(combinedData.reduce((acc, data) => {
+                  if (!acc[data.source]) {
+                    acc[data.source] = [];
+                  }
+                  acc[data.source].push(data);
+                  return acc;
+                }, {} as { [key: string]: { source: string; key: string; value: any }[] })).map(([source, sourceData]) => {
+                  if (source === modalContent.title) {
+                    return sourceData.map((data, index) => {
+                      let key = data['key'];
+                      let value = data['value'];
+                      if (key === "State" && value === "running") {
+                        modalContent.running = true;
+                      }
+                      return (
+                        <p key={index}>{key} - {value}</p>
+                      );
+                    });
+                  }
+                  else if(modalContent.title === "Wellness Tracker" || 
+                          modalContent.title === "MTG Life Counter" || 
+                          modalContent.title === "MTG Random Card" || 
+                          modalContent.title === "React Portfolio" ||
+                          modalContent.title === "Docker Services"
+                        ) {
+                    modalContent.running = true;
+                  }
+                  return null; // Avoid rendering anything for sources that don't match
+                })}
+
+
+                
+                {/* <h2>Current Viewport Dimensions</h2>
+                <p>Width: {viewportWidth}px</p>
+                <p>Height: {viewportHeight}px</p> */}
+                  {/* Conditionally render content based on `isOpen` */}
+                  {openIframe && 
+                  (<>
+                    {/* <p>The state is now OPEN!</p> */}
+                      <Modal 
+                          isOpen={openIframe} 
+                          onRequestClose={() => closeModal('iframe')} 
+                          contentLabel="Example Modal"
+                          className={`custom-content ${closingIframe ? 'closing' : ''}`}
+                          //className={`custom-content ${closingIframe ? 'closing' : ''}`}
+                          overlayClassName={`custom-overlay ${closingIframe ? 'closing' : ''}`}
+                        >
+                          {modalContent && (
+                            <>
+                              {/* <h2>{modalContent.title}</h2> */}
+                              {/* <a href={modalContent.git_url} target="_blank" rel="noopener noreferrer">GIT REPO</a> */}
+                              <button className='close-btn' onClick={() => closeModal('iframe')}>X</button>
+                                  <iframe
+                                    src={modalContent.url}
+                                    title={modalContent.title}
+                                    allow="cross-origin-isolated"
+                                    width={(selectedPhone.height_px * (scaleRatioY + 1))}
+                                    height={(selectedPhone.width_px * (scaleRatioX + 1))}
+                                  />
+                            </>
+                          )}
+                      </Modal>
+                  </>)}
+                    {/*
+                    {!openIframe && <p>The state is CLOSED.</p>}
+                    */}
 
               </div>
 
               {/* Right side with text */}
               <div className="modal-text">
                 <div>
-                  {/* <div className="modal-description"> */}
-                      {/* <h2>Description</h2> */}
-                      {/* <p> {modalContent.modal_description} </p> */}
-                          <div style={{fontSize: 12.5}} 
-                    dangerouslySetInnerHTML={{ __html: modalContent.modal_description }} 
-                  />
-                    
-                  {/* </div> */}
+                  <div style={{fontSize: 12.5}} 
+                    dangerouslySetInnerHTML={{ __html: modalContent.modal_description }} />
                 </div> 
-              </div>
 
+              </div>
             </div>
           </div>
         )}
@@ -834,12 +1019,3 @@ const calculateScreenDimensions = (screen_size_inch: number, width: number, heig
 };
 
 export default Projects;
-
-
-
-
-
-
-
-
-

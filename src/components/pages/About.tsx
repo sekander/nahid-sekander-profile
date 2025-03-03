@@ -16,9 +16,6 @@ const About: React.FunctionComponent = () => {
         <>
             <AboutText>About</AboutText>
             <ExpandableCard />
-
-      {/* Pass an empty function to setToggle */}
-      {/* <ExpandableCard setToggle={() => {}} /> */}
         </>
     )
 }

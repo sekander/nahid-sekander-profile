@@ -1,5 +1,37 @@
-- Expandable Card : When card expands scroll down to fit new context
-	- Each cell should be expandable and provide a command that displays the tech 
-- Projects : Have a video demo reel play back while hovering the project card
-- Home : Make Home Text much larger
-- Footer : Add one
+Portfolio
+
+- Create a gif for each project
+- pull in data from docker-service api update each project with dockers stats
+- add mtg-deck-builder and docker-service app 
+- finish memory colour master
+- finish ovpn key generator 
+- change the into look 
+- create functional form page 
+- create better nav bar 
+
+Web apps
+- improve teacher app; Fix sql query to ensure sql injection doesnt occure
+- improve calendar app; fix back card info 
+- complete all functionalities of mtg-deck builder
+
+--------------------------------------------------------------------------------
+
+School
+
+- finish php assignment 1
+- start building ixd app
+
+--------------------------------------------------------------------------------
+
+Work
+
+- pull camera data from pc and analyize it
+- create back-end route that takes in raw data and feeds it back to an web api call 
+
+--------------------------------------------------------------------------------
+
+Job Hunt
+
+- Fix all git hub repo's 
+- Get referals 
+- Apply to jobs daily 5x

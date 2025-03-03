@@ -13,11 +13,9 @@ const container = document.getElementById('root')!;
 // Create a root and render the App
 const root = ReactDOM.createRoot(container);
 
-// ReactDOM.render(
 root.render(
   <React.StrictMode>
     <GlobalStyle />
     <App />
   </React.StrictMode>,
-  // document.getElementById('root')
 );
